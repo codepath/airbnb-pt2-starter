@@ -63,22 +63,6 @@ ul {
   padding: 0;
   margin: 0;
 }
-
-/* button {
-  background: transparent;
-  border: solid 1px transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.1s ease;
-  padding: 12px 18px;
-  border-radius: 4px;
-  background: var(--dark-blue);
-  color: white;
-} */
 button:active {
   transform: translateY(1px);
 }
@@ -154,4 +138,7 @@ button:disabled {
 }
 .error {
   color: var(--bright-red);
+}
+.splash-image {
+  background-size: cover;
 }

@@ -6,24 +6,7 @@ const createBookings = async (userIds, listingIds) => {
 
   const listingResults = await db.query(
     `
-    SELECT id,
-           user_id AS "userId",
-           (
-             SELECT username 
-             FROM users 
-             WHERE id = user_id
-           ) AS "username",
-           title,
-           description,
-           location,
-           image_url AS "imageUrl",
-           image_url2 AS "imageUrl2",
-           image_url3 AS "imageUrl3",
-           price,
-           -- include 10% market fees
-           CEIL(price + price * 0.1) AS "totalAmount",
-           created_at AS "createdAt",
-           updated_at AS "updatedAt"
+    SELECT id, price
     FROM listings
     WHERE id = $1;
     `,

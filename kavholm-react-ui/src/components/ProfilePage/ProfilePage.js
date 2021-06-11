@@ -1,13 +1,11 @@
 import { Link } from "react-router-dom"
-import { useAuthContext } from "contexts/auth"
 import { Button, Card } from "components"
 import "./ProfilePage.css"
 
 const defaultAvatar =
   "https://images.unsplash.com/photo-1607094838522-f16402ae75c4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1366&q=80"
 
-export default function ProfilePage() {
-  const { user } = useAuthContext()
+export default function ProfilePage({ user }) {
   const avatarUrl = user?.avatar ?? defaultAvatar
 
   return (

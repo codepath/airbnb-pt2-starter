@@ -1,10 +1,7 @@
-import { useListingsContext } from "contexts/listings"
 import { ListingsGrid } from "components"
 import "./ListingsHome.css"
 
-const ListingsHome = () => {
-  const { listings } = useListingsContext()
-
+const ListingsHome = ({ listings }) => {
   return (
     <div className="ListingsHome">
       <div className="splash-image">

@@ -1,9 +1,6 @@
 import { useState } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { Button, Logo, NavDropdown } from "components"
-import { useAuthContext, selectUserIsAuthenticated } from "contexts/auth"
-import { useListingsContext } from "contexts/listings"
-import { useBookingsContext } from "contexts/bookings"
 import "./Navbar.css"
 
 const determineIfLogoIsDark = (location) => {
@@ -16,21 +13,14 @@ const determineIfLogoIsDark = (location) => {
   return false
 }
 
-const Navbar = () => {
+const Navbar = ({ user, isAuthenticated, logoutUser }) => {
   const navigate = useNavigate()
   const location = useLocation()
   const isLogoDark = determineIfLogoIsDark(location)
-  const { user, initialized, handlers: authHandlers } = useAuthContext()
-  const { handlers: listingsHandlers } = useListingsContext()
-  const { handlers: bookingsHandler } = useBookingsContext()
   const [open, setOpen] = useState(false)
 
-  const isAuthenticated = selectUserIsAuthenticated(user, initialized)
-
-  const handleOnLogoutAndClearContext = async () => {
-    listingsHandlers.clear()
-    bookingsHandler.clear()
-    await authHandlers.logoutUser()
+  const handleOnLogout = async () => {
+    await logoutUser()
     navigate("/")
   }
 
@@ -45,13 +35,7 @@ const Navbar = () => {
       <ul className="navbar-links">
         {isAuthenticated ? (
           <li>
-            <NavDropdown
-              open={open}
-              setOpen={setOpen}
-              user={user}
-              // setUser={setUser}
-              logoutUser={handleOnLogoutAndClearContext}
-            />
+            <NavDropdown open={open} setOpen={setOpen} user={user} logoutUser={handleOnLogout} />
           </li>
         ) : (
           <>

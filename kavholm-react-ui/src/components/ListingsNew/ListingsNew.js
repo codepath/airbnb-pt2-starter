@@ -31,8 +31,8 @@ const formFields = [
   },
 ]
 
-export default function ListingsNew() {
-  const { form, handleOnSubmit, handleOnChange, errors, isProcessing } = useListingsNewForm()
+export default function ListingsNew({ addListing }) {
+  const { form, errors, isProcessing, handleOnChange, handleOnSubmit } = useListingsNewForm(addListing)
 
   return (
     <>

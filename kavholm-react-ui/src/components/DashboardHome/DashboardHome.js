@@ -1,14 +1,10 @@
 import { Link } from "react-router-dom"
 import { EmptyPrompt, ListingsGrid } from "components"
-import { useBookingsContext } from "contexts/bookings"
-import { useListingsContext, selectListingsUserHasBookedTripsFor } from "contexts/listings"
 import "./DashboardHome.css"
 
-export default function DashboardHome() {
-  const { bookings } = useBookingsContext()
-  const { listings } = useListingsContext()
-
-  const userBookedListings = selectListingsUserHasBookedTripsFor(bookings, listings)
+export default function DashboardHome({ bookings, listings }) {
+  const userBookedListingIds = bookings.filter((b) => Boolean(b)).map((b) => b.listingId)
+  const userBookedListings = listings.filter((l) => userBookedListingIds.includes(l.id))
 
   return (
     <div className="DashboardHome">

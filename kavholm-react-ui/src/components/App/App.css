@@ -7,6 +7,6 @@
   min-height: 100vh;
   overflow-x: hidden;
 }
-.splash-image {
-  background-size: cover;
-}
+/* .App .app-main {
+  padding-top: var(--navbar-height);
+} */

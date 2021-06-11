@@ -1,8 +1,7 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Link, useParams } from "react-router-dom"
 import { Button, BookingModal, NotFound } from "components"
-import { useListingsDetail } from "hooks/useListingsDetail"
-import { useAuthContext, selectUserIsAuthenticated } from "contexts/auth"
+import apiClient from "services/apiClient"
 import { formatPrice } from "utils/format"
 import { getListingPrice, getMarketplaceFees } from "utils/calculations"
 import person from "assets/person.svg"
@@ -11,13 +10,33 @@ import stars from "assets/stars.svg"
 import save from "assets/save.svg"
 import "./ListingsDetail.css"
 
-export default function ListingsDetail() {
-  const { user, initialized } = useAuthContext()
+export default function ListingsDetail({ user, isAuthenticated, setBookings }) {
   const { listingId } = useParams()
-  const { isFetching, listing, error } = useListingsDetail(listingId)
+  const [hasFetched, setHasFetched] = useState(false)
+  const [isFetching, setIsFetching] = useState(false)
+  const [error, setError] = useState(null)
+  const [listing, setListing] = useState({})
   const [isBooking, setIsBooking] = useState(false)
 
-  const isAuthenticated = selectUserIsAuthenticated(user, initialized)
+  useEffect(() => {
+    const fetchListing = async () => {
+      setIsFetching(true)
+      setHasFetched(false)
+
+      const { data, error } = await apiClient.fetchListingById(listingId)
+      if (error) setError(error)
+      if (data?.listing) {
+        setListing(data.listing)
+      }
+
+      setIsFetching(false)
+      setHasFetched(true)
+    }
+
+    if (isAuthenticated) {
+      fetchListing()
+    }
+  }, [listingId, isAuthenticated])
 
   const handleBookingStartClick = () => {
     setIsBooking(true)
@@ -25,13 +44,19 @@ export default function ListingsDetail() {
 
   if (isFetching) return null
 
-  if (!listing?.price) {
+  if (hasFetched && !listing?.price) {
     return <NotFound message={"No listing found."} />
   }
 
   return (
     <div className="ListingsDetail">
-      <BookingModal isOpen={isBooking} toggleModal={() => setIsBooking(false)} listing={listing} />
+      <BookingModal
+        user={user}
+        isOpen={isBooking}
+        toggleModal={() => setIsBooking(false)}
+        listing={listing}
+        setBookings={setBookings}
+      />
 
       <div className="content">
         <p className={`error ${error && "show"}`}>{error && `Error: ${error}`}</p>
