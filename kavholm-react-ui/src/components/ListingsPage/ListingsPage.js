@@ -1,16 +1,13 @@
 import { Routes, Route } from "react-router-dom"
-import { ListingsDetail, ListingsHome, ListingsNew, NotFound } from "components"
+import { ListingsDetail, ListingsHome, ListingsNew, NotFound, ProtectedRoute } from "components"
 import "./ListingsPage.css"
 
-export default function ListingsPage({ listings, user, isAuthenticated, setBookings, addListing }) {
+export default function ListingsPage() {
   return (
     <Routes>
-      <Route path="/" element={<ListingsHome listings={listings} />} />
-      <Route path="/new" element={<ListingsNew listings={listings} addListing={addListing} />} />
-      <Route
-        path="/:listingId"
-        element={<ListingsDetail user={user} isAuthenticated={isAuthenticated} setBookings={setBookings} />}
-      />
+      <Route path="/" element={<ListingsHome />} />
+      <Route path="/new" element={<ProtectedRoute element={<ListingsNew />} />} />
+      <Route path="/:listingId" element={<ProtectedRoute element={<ListingsDetail />} />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   )

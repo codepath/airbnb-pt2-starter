@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { Button, BookingModal, NotFound } from "components"
-import apiClient from "services/apiClient"
+import { useListingsDetail } from "hooks/useListingsDetail"
+import { useAuthContext, selectUserIsAuthenticated } from "contexts/auth"
 import { formatPrice } from "utils/format"
 import { getListingPrice, getMarketplaceFees } from "utils/calculations"
 import person from "assets/person.svg"
@@ -10,33 +11,13 @@ import stars from "assets/stars.svg"
 import save from "assets/save.svg"
 import "./ListingsDetail.css"
 
-export default function ListingsDetail({ user, isAuthenticated, setBookings }) {
+export default function ListingsDetail() {
+  const { user, initialized } = useAuthContext()
   const { listingId } = useParams()
-  const [hasFetched, setHasFetched] = useState(false)
-  const [isFetching, setIsFetching] = useState(false)
-  const [error, setError] = useState(null)
-  const [listing, setListing] = useState({})
+  const { isFetching, listing, error } = useListingsDetail(listingId)
   const [isBooking, setIsBooking] = useState(false)
 
-  useEffect(() => {
-    const fetchListing = async () => {
-      setIsFetching(true)
-      setHasFetched(false)
-
-      const { data, error } = await apiClient.fetchListingById(listingId)
-      if (error) setError(error)
-      if (data?.listing) {
-        setListing(data.listing)
-      }
-
-      setIsFetching(false)
-      setHasFetched(true)
-    }
-
-    if (isAuthenticated) {
-      fetchListing()
-    }
-  }, [listingId, isAuthenticated])
+  const isAuthenticated = selectUserIsAuthenticated(user, initialized)
 
   const handleBookingStartClick = () => {
     setIsBooking(true)
@@ -44,19 +25,13 @@ export default function ListingsDetail({ user, isAuthenticated, setBookings }) {
 
   if (isFetching) return null
 
-  if (hasFetched && !listing?.price) {
+  if (!listing?.price) {
     return <NotFound message={"No listing found."} />
   }
 
   return (
     <div className="ListingsDetail">
-      <BookingModal
-        user={user}
-        isOpen={isBooking}
-        toggleModal={() => setIsBooking(false)}
-        listing={listing}
-        setBookings={setBookings}
-      />
+      <BookingModal isOpen={isBooking} toggleModal={() => setIsBooking(false)} listing={listing} />
 
       <div className="content">
         <p className={`error ${error && "show"}`}>{error && `Error: ${error}`}</p>

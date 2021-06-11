@@ -27,7 +27,7 @@ describe("GET /bookings/", () => {
     const { bookings } = res.body
     expect(bookings.length).toEqual(2)
 
-    const firstBooking = bookings[0]
+    const firstBooking = bookings[bookings.length - 1]
 
     firstBooking.totalCost = Number(firstBooking.totalCost)
 
@@ -88,7 +88,7 @@ describe("GET /bookings/listings", () => {
 })
 
 /************************************** GET bookings/listings/:listingId */
-describe("GET /bookings/listings", () => {
+describe("GET /bookings/listings/:listingId", () => {
   test("Listing owner can fetch all bookings for a single listing", async () => {
     const listingId = testListingIds[0]
     const res = await request(app)
@@ -100,7 +100,7 @@ describe("GET /bookings/listings", () => {
     const { bookings } = res.body
     expect(bookings.length).toEqual(2)
 
-    const firstBooking = bookings[0]
+    const firstBooking = bookings[bookings.length - 1]
 
     firstBooking.totalCost = Number(firstBooking.totalCost)
 

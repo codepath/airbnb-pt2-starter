@@ -5,7 +5,7 @@ export default function ListingsGrid({ listings, children }) {
   const renderListings = () => {
     const dummyListings = new Array(4).fill(0).map(() => ({ id: Math.random() }))
 
-    const listingItems = listings?.length >= 4 ? listings : [...listings, ...dummyListings]
+    const listingItems = listings?.length < 4 ? [...listings, ...dummyListings] : listings
 
     const items = listingItems.map((l) => (
       <li className="listing-item" key={l.id}>

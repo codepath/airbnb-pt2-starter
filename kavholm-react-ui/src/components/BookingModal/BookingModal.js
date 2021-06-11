@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react"
-import moment from "moment"
-import apiClient from "services/apiClient"
 import Modal from "react-modal"
 import DatePicker from "react-datepicker"
 import { Button, InputField } from "components"
+import { useBookingModal } from "hooks/useBookingModal"
+import { useAuthContext } from "contexts/auth"
 import { formatPrice, formatDate } from "utils/format"
 import { getTotalCostForLodging } from "utils/calculations"
 import confirmed from "assets/confirmed.svg"
@@ -30,32 +29,21 @@ const modalStyles = {
   },
 }
 
-export default function BookingModal({ user, isOpen, toggleModal, listing, setBookings }) {
-  const [isProcessing, setIsProcessing] = useState(false)
-  const [error, setError] = useState(false)
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date(moment().add(3, "days").valueOf()))
-  const [guests, setGuests] = useState(1)
-  const [booking, setBooking] = useState(null)
-
-  const listingId = listing?.id
-
-  const handleOnSubmitBooking = async () => {
-    setIsProcessing(true)
-
-    const { data, error } = await apiClient.bookListing({ listingId, newBooking: { startDate, endDate, guests } })
-    if (error) setError(error)
-    if (data?.booking) {
-      setBooking(data.booking)
-      setBookings((bookings) => [data.booking, ...bookings])
-    }
-
-    setIsProcessing(false)
-  }
-
-  useEffect(() => {
-    setBooking(null)
-  }, [listingId])
+export default function BookingModal({ isOpen, toggleModal, listing }) {
+  const { user } = useAuthContext()
+  const {
+    startDate,
+    endDate,
+    guests,
+    error,
+    setStartDate,
+    setEndDate,
+    setGuests,
+    handleOnSubmitBooking,
+    isProcessing,
+    booking,
+    // setError,
+  } = useBookingModal(listing.id)
 
   return (
     <Modal
@@ -112,7 +100,11 @@ export default function BookingModal({ user, isOpen, toggleModal, listing, setBo
               </InputField>
             </div>
 
-            <h1 className="booking-title">{` `}</h1>
+            <h1 className="booking-title">
+              {/* Pay <span className="price">{`USD ${formatPrice(getListingTotalAmount(listing))}`}</span> */}
+              {` `}
+              {/* to buy */}
+            </h1>
 
             <Button isLoading={isProcessing} buttonType="primary" onClick={handleOnSubmitBooking}>
               Book Lodging for {`USD ${formatPrice(getTotalCostForLodging({ listing, startDate, endDate }))}`}

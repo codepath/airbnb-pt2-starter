@@ -1,6 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import { App } from "components"
+import App from "./components/App/App"
 import "react-datepicker/dist/react-datepicker.css"
 import "./index.css"
 

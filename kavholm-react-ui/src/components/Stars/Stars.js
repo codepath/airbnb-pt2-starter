@@ -1,5 +1,6 @@
 import { Fragment } from "react"
-import { IconStar, IconStarHalf } from "components"
+import IconStar from "../Icons/Star"
+import IconStarHalf from "../Icons/StarHalf"
 import "./Stars.css"
 
 const createStars = ({ numStars, max, epsilon = 0.2 }) => {

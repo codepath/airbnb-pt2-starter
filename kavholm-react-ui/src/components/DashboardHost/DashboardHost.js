@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom"
 import { Button, EmptyPrompt, ListingsGrid } from "components"
+import { useListingsContext, selectListingsUserIsOwnerOf } from "contexts/listings"
+import { useAuthContext } from "contexts/auth"
 import "./DashboardHost.css"
 
 const NewListingButton = () => {
@@ -10,8 +12,11 @@ const NewListingButton = () => {
   )
 }
 
-export default function DashboardHost({ user, listings }) {
-  const userOwnedListings = listings.filter((l) => l.userId === user.id)
+export default function DashboardHost() {
+  const { user } = useAuthContext()
+  const { listings } = useListingsContext()
+
+  const userOwnedListings = selectListingsUserIsOwnerOf(user, listings)
 
   return (
     <div className="DashboardHost">

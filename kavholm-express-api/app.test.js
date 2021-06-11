@@ -14,6 +14,6 @@ test("not found for site 404 (test stack print)", async () => {
   delete process.env.NODE_ENV
 })
 
-afterAll(() => {
-  db.end()
+afterAll(async () => {
+  await db.end()
 })

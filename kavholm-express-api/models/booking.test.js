@@ -71,7 +71,7 @@ describe("Booking", () => {
       const bookings = await Booking.listBookingsFromUser(user)
       expect(bookings.length).toEqual(2)
 
-      const firstBooking = bookings[0]
+      const firstBooking = bookings[bookings.length - 1]
 
       firstBooking.totalCost = Number(firstBooking.totalCost)
 
@@ -107,7 +107,7 @@ describe("Booking", () => {
       const bookings = await Booking.listBookingsForListing(listingId)
       expect(bookings.length).toEqual(2)
 
-      const firstBooking = bookings[0]
+      const firstBooking = bookings[bookings.length - 1]
 
       firstBooking.totalCost = Number(firstBooking.totalCost)
 
@@ -143,7 +143,7 @@ describe("Booking", () => {
       const bookings = await Booking.listBookingsForUserListings(user)
       expect(bookings.length).toEqual(2)
 
-      const firstBooking = bookings[0]
+      const firstBooking = bookings[bookings.length - 1]
 
       firstBooking.totalCost = Number(firstBooking.totalCost)
 

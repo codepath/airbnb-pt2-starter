@@ -69,11 +69,36 @@ const createBookings = async (userIds, listingIds) => {
       ), 
       $6, 
       $7
-    ), (
+    )    
+    `,
+    [
+      "card",
+      firstBooking.startDate,
+      firstBooking.endDate,
+      firstBooking.guests,
+      listing.price,
+      listing.id,
+      userId,
+      // bookings done separately to ensure that created_at timestamp is different
+    ]
+  )
+
+  await db.query(
+    `
+    INSERT INTO bookings (
+      payment_method, 
+      start_date, 
+      end_date, 
+      guests, 
+      total_cost, 
+      listing_id, 
+      user_id
+    )
+    VALUES (
       $1, 
-      ($8)::date, 
-      ($9)::date, 
-      $10, 
+      ($2)::date, 
+      ($3)::date, 
+      $4, 
       -- calculate total_cost by
       -- multiplying days spent (+1)
       -- with the listing price + market fees
@@ -83,19 +108,17 @@ const createBookings = async (userIds, listingIds) => {
       ), 
       $6, 
       $7
-    )
-  `,
+    )    
+    `,
     [
       "card",
-      firstBooking.startDate,
-      firstBooking.endDate,
-      firstBooking.guests,
-      listing.price,
-      listing.id,
-      userId,
       secondBooking.startDate,
       secondBooking.endDate,
       secondBooking.guests,
+      listing.price,
+      listing.id,
+      userId,
+      // bookings done separately to ensure that created_at timestamp is different
     ]
   )
 
